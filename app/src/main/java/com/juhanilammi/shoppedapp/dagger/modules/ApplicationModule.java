@@ -24,16 +24,16 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    Context providesContext(){
+    public Context providesContext(){
         return application;
     }
 
     @Provides @Singleton
-    SharedPreferences providesSharedPreferences(){
+    public SharedPreferences providesSharedPreferences(){
         return application.getSharedPreferences(application.getPackageName(), Context.MODE_PRIVATE);
     }
     @Provides @Singleton
-    SessionManager providesSessionManager(SharedPreferences preferences, Context context){
+    public SessionManager providesSessionManager(SharedPreferences preferences, Context context){
         return new SessionManager(preferences, context);
     }
 

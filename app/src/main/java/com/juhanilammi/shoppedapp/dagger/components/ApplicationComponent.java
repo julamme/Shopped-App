@@ -3,6 +3,7 @@ package com.juhanilammi.shoppedapp.dagger.components;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.juhanilammi.shoppedapp.activities.base.BaseActivity;
+import com.juhanilammi.shoppedapp.activities.main.MainActivity;
 import com.juhanilammi.shoppedapp.activities.signin.SignInActivity;
 import com.juhanilammi.shoppedapp.application.ShoppedApplication;
 import com.juhanilammi.shoppedapp.dagger.modules.ApplicationModule;
@@ -21,6 +22,8 @@ public interface ApplicationComponent {
      void inject(ShoppedApplication app);
 
      void inject(SignInActivity signInActivity);
+
+     void inject(MainActivity mainActivity);
 
 
      // <V extends MvpView, P extends MvpPresenter> void inject(BaseActivity<V, P> vpBaseActivity);

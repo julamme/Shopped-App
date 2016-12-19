@@ -26,9 +26,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.juhanilammi.shoppedapp.R;
 import com.juhanilammi.shoppedapp.activities.base.BaseActivity;
+import com.juhanilammi.shoppedapp.activities.main.MainActivity;
 import com.juhanilammi.shoppedapp.application.ShoppedApplication;
 import com.juhanilammi.shoppedapp.modules.session.SessionListener;
 import com.juhanilammi.shoppedapp.modules.session.SessionManager;
+import com.juhanilammi.shoppedapp.modules.session.SignInListener;
 
 import javax.inject.Inject;
 
@@ -36,7 +38,7 @@ import javax.inject.Inject;
  * Created by Laemmi on 17.12.2016.
  */
 
-public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> implements SigninView, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, SessionListener {
+public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> implements SigninView, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, SessionListener, SignInListener {
     private static final String TAG = SignInActivity.class.getSimpleName();
     @Inject
     Context context;
@@ -57,8 +59,9 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
         ((ShoppedApplication) getApplication()).getComponent().inject(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestId()
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+                .requestId()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
@@ -73,6 +76,7 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
         super.onStart();
         mFirebaseAuth.addAuthStateListener(sessionManager);
         sessionManager.setListener(this);
+        sessionManager.setSignInListener(this);
     }
 
     @Override
@@ -84,12 +88,11 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
 
     @NonNull
     @Override
-    public MvpPresenter createPresenter() {
+    public SignInPresenter createPresenter() {
         return new SignInPresenter();
     }
 
     private void signIn() {
-        Log.d(TAG, "signIn: ");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, SIGN_IN_ID);
     }
@@ -100,15 +103,12 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == SIGN_IN_ID) {
-            Log.d(TAG, "onActivityResult: request");
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                Log.d("login", "onActivityResult: ");
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                Log.d("login", "failed ");
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
@@ -121,13 +121,10 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("LOGIN", "signInWithCredential:onComplete:" + task.isSuccessful());
-
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("LOGIN", "signInWithCredential", task.getException());
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -156,5 +153,11 @@ public class SignInActivity extends BaseActivity<SigninView, SignInPresenter> im
     @Override
     public void onSessionExpired() {
         Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSignedIn() {
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

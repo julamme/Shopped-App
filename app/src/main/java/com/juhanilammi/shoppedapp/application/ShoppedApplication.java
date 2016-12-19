@@ -6,7 +6,9 @@ import android.util.Log;
 import com.juhanilammi.shoppedapp.dagger.components.ApplicationComponent;
 
 import com.juhanilammi.shoppedapp.dagger.components.DaggerApplicationComponent;
+import com.juhanilammi.shoppedapp.dagger.components.DataComponent;
 import com.juhanilammi.shoppedapp.dagger.modules.ApplicationModule;
+import com.juhanilammi.shoppedapp.dagger.modules.DataModule;
 
 /**
  * Created by Laemmi on 17.12.2016.
@@ -14,17 +16,20 @@ import com.juhanilammi.shoppedapp.dagger.modules.ApplicationModule;
 
 public class ShoppedApplication extends Application {
 
-    ApplicationComponent component;
+    ApplicationComponent applicationComponent;
+    DataComponent dataComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("APPPPP", "onCreate: ");
-        component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
-        component.inject(this);
+
+        applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        applicationComponent.inject(this);
+
     }
 
+
     public ApplicationComponent getComponent() {
-        return component;
+        return applicationComponent;
     }
 }

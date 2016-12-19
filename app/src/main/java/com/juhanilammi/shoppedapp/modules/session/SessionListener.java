@@ -5,6 +5,5 @@ package com.juhanilammi.shoppedapp.modules.session;
  */
 
 public interface SessionListener {
-
     void onSessionExpired();
 }
