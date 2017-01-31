@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ((ShoppedApplication) getApplication()).getComponent().inject(this);
-        Log.i("MainActivity", "onCreate: "+sessionManager);
 
     }
 
