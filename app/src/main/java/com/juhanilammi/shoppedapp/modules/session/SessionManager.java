@@ -66,11 +66,14 @@ public class SessionManager implements FirebaseAuth.AuthStateListener {
      * Listeners should react by returning to a state that does not signing in. This mainly means the SignInActivity
      */
     private void setLoggedOut() {
-        this.user = null;
-        FirebaseAuth.getInstance().signOut();
-        for (SessionListener listener : listeners) {
-            listener.onSessionExpired();
+        if(this.user != null){
+            this.user = null;
+            FirebaseAuth.getInstance().signOut();
+            for (SessionListener listener : listeners) {
+                listener.onSessionExpired();
+            }
         }
+
     }
 
     /**
@@ -82,7 +85,8 @@ public class SessionManager implements FirebaseAuth.AuthStateListener {
     private void setLoggedIn(FirebaseUser user) {
         this.user = user;
 
-        Log.d(TAG, "setLoggedIn: USER "+user);
+
+        Log.d(TAG, "setLoggedIn: USER "+user.getDisplayName()+" "+user.getUid()+" "+user.getProviderId());
         if (signInListener != null) {
             signInListener.onSignedIn();
         }

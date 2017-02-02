@@ -3,6 +3,7 @@ package com.juhanilammi.shoppedapp.dagger.components;
 import com.juhanilammi.shoppedapp.activities.main.MainPresenter;
 import com.juhanilammi.shoppedapp.dagger.modules.ApplicationModule;
 import com.juhanilammi.shoppedapp.dagger.modules.DataModule;
+import com.juhanilammi.shoppedapp.fragments.NewListPresenter;
 
 import javax.inject.Singleton;
 
@@ -16,4 +17,6 @@ import dagger.Component;
 public interface DataComponent {
 
     void inject(MainPresenter presenter);
+
+    void inject(NewListPresenter presenter);
 }

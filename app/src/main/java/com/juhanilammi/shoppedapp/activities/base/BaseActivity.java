@@ -18,7 +18,5 @@ import javax.inject.Inject;
  * Created by Laemmi on 17.12.2016.
  */
 
-public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
-        extends MvpActivity<V, P>
-        implements BaseMvpView {
+public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpActivity<V, P> implements BaseMvpView {
 }

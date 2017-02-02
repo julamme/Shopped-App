@@ -36,13 +36,4 @@ public class MainPresenter extends BasePresenter<MainView>{
         manager = sessionManager;
     }
 
-    public void saveDemoList(String userID) {
-        Log.d("TAGI", "saveDemoList: USER ID "+userID);
-        ShoppingList list = new ShoppingList();
-        list.setName("My demo list");
-        list.addItem(new ShoppingItem("Milk", "Delicious milk"));
-        list.addItem(new ShoppingItem("Cheese", "Delicious cheese"));
-        list.addItem(new ShoppingItem("Eggs", "Delicious eggs"));
-        dataProvider.saveNewList(userID, list);
-    }
 }
